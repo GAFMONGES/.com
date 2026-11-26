@@ -248,11 +248,16 @@
     .scroll-indicator { display: none; }
 
     .about-grid { gap: 32px; }
+    /* FIX FOTO MÓVIL: marco se adapta a la foto, sin recortar */
     .about-image {
       max-width: 65% !important;
       width: 65% !important;
-      aspect-ratio: 3/4 !important;
+      aspect-ratio: auto !important;
       margin: 0 auto !important;
+    }
+    .about-image img {
+      height: auto !important;
+      object-fit: contain !important;
     }
 
     .value-grid, .cred-grid, .results-grid { grid-template-columns: 1fr; gap: 20px; }
@@ -321,7 +326,7 @@
 <section id="about">
   <div class="container about-grid">
     <div class="about-image">
-      <img src="gustavo.png?v=3" alt="Gustavo Adolfo Fretes Monges" />
+      <img src="gustavo.png?v=4" alt="Gustavo Adolfo Fretes Monges" />
     </div>
     <div class="about-text">
       <div class="section-label">Sobre mí</div>
