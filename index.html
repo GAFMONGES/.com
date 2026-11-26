@@ -207,7 +207,7 @@
     display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem;
     border-top: 1px solid rgba(201,168,76,0.15); }
 
-  /* ===== RESPONSIVE OPTIMIZADO ===== */
+  /* ===== RESPONSIVE ===== */
   @media (max-width: 1024px) {
     .hero-inner, .about-grid, .value-head, .services-head { grid-template-columns: 1fr; gap: 40px; }
     .hero-stats { flex-direction: row; flex-wrap: wrap; border-left: none; border-top: 1px solid rgba(201,168,76,0.25); padding: 30px 0 0; gap: 24px; }
@@ -223,14 +223,12 @@
   }
 
   @media (max-width: 768px) {
-    /* Espaciado general reducido */
     section, #hero { padding: 60px 20px; }
     #hero { padding-top: 100px; }
     
-    /* Navbar móvil */
     #navbar { padding: 0 20px; height: 70px; }
     .nav-logo { font-size: 1rem; }
-    .hamburger { display: flex; width: 44px; height: 44px; align-items: center; justify-content: center; }
+    .hamburger { display: flex !important; width: 44px; height: 44px; align-items: center; justify-content: center; }
     .nav-links { 
       position: fixed; top: 70px; left: 0; width: 100%; height: calc(100vh - 70px);
       background: rgba(7,21,50,0.98); backdrop-filter: blur(10px);
@@ -242,7 +240,6 @@
     .nav-links a { font-size: 1.1rem; padding: 12px 24px; }
     .nav-links a.nav-cta { margin-top: 16px; width: 80%; text-align: center; }
 
-    /* Hero móvil */
     .hero-title { font-size: clamp(2rem, 8vw, 3rem); margin-bottom: 20px; }
     .hero-description { font-size: 1rem; margin-bottom: 32px; }
     .hero-buttons { flex-direction: column; width: 100%; }
@@ -250,39 +247,33 @@
     .hero-stats { flex-direction: column; gap: 20px; padding: 24px 0 0; }
     .scroll-indicator { display: none; }
 
-    /* About móvil - FOTO MÁS ANGOSTA Y VERTICAL */
     .about-grid { gap: 32px; }
     .about-image {
-      max-width: 65%;
-      aspect-ratio: 3/4;
-      margin: 0 auto;
+      max-width: 65% !important;
+      width: 65% !important;
+      aspect-ratio: 3/4 !important;
+      margin: 0 auto !important;
     }
 
-    /* Tarjetas y rejillas a 1 columna */
     .value-grid, .cred-grid, .results-grid { grid-template-columns: 1fr; gap: 20px; }
     .value-card, .cred-col, .result-card { padding: 28px 24px; }
     
-    /* Servicios: de tabla a tarjetas apiladas */
     .services-table { display: flex; flex-direction: column; gap: 16px; border: none; background: transparent; }
     .svc { border: 1px solid var(--line); border-radius: 4px; background: var(--white); padding: 28px 24px; }
 
-    /* Sectores en cuadrícula 2x2 */
     .sectors-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 32px; }
     .sector { flex: none; border-left: none; border: 1px solid rgba(201,168,76,0.2); border-radius: 4px; padding: 20px 12px; }
     .sector .icon { font-size: 1.4rem; margin-bottom: 8px; }
     .sector h4 { font-size: 0.65rem; }
 
-    /* Metodología vertical */
     .step { text-align: left; display: flex; gap: 16px; align-items: flex-start; padding: 0; }
     .step-circle { width: 48px; height: 48px; font-size: 1.1rem; margin: 0; flex-shrink: 0; }
     .step h4 { margin-bottom: 4px; font-size: 0.75rem; }
     .step p { font-size: 0.9rem; }
 
-    /* Contacto móvil */
     .contact-info { flex-direction: column; gap: 24px; margin-bottom: 40px; }
     .contact-quote { font-size: 1.5rem; }
     
-    /* Footer móvil */
     footer { flex-direction: column; gap: 12px; padding: 32px 20px; text-align: center; }
   }
 </style>
@@ -330,7 +321,7 @@
 <section id="about">
   <div class="container about-grid">
     <div class="about-image">
-      <img src="gustavo.png" alt="Gustavo Adolfo Fretes Monges" />
+      <img src="gustavo.png?v=3" alt="Gustavo Adolfo Fretes Monges" />
     </div>
     <div class="about-text">
       <div class="section-label">Sobre mí</div>
@@ -500,16 +491,35 @@
 <script>
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
-  hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
-  navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('active')));
-  window.addEventListener('scroll', () => {
+  
+  hamburger.addEventListener('click', function() {
+    navLinks.classList.toggle('active');
+    console.log('Menú toggled, clase active:', navLinks.classList.contains('active'));
+  });
+  
+  navLinks.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      navLinks.classList.remove('active');
+    });
+  });
+  
+  window.addEventListener('scroll', function() {
     document.getElementById('navbar').style.background = window.scrollY > 50 ? 'rgba(7,21,50,0.97)' : 'rgba(10,31,68,0.92)';
   });
-  const obs = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) { e.target.style.opacity = 1; e.target.style.transform = 'translateY(0)'; }
-  }), { threshold: 0.12 });
-  document.querySelectorAll('.svc, .value-card, .step, .sector, .result-card, .cred-col, .about-text, .about-image').forEach(el => {
-    el.style.opacity = 0; el.style.transform = 'translateY(28px)'; el.style.transition = 'opacity .6s ease, transform .6s ease';
+  
+  const obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.12 });
+  
+  document.querySelectorAll('.svc, .value-card, .step, .sector, .result-card, .cred-col, .about-text, .about-image').forEach(function(el) {
+    el.style.opacity = 0;
+    el.style.transform = 'translateY(28px)';
+    el.style.transition = 'opacity .6s ease, transform .6s ease';
     obs.observe(el);
   });
 </script>
